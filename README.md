@@ -9,7 +9,7 @@ It is designed for businesses seeking **data-driven decision-making**, allowing 
 ## **📊 Dashboard Preview**  
 
 <div style="display: flex; flex-direction: row;">
-  <img src="Icons & Screenshots/Dashboard.gif" alt="Dashboard" width="400" style="margin-right: 20px;">
+  <img src="Media (Images, icons & gifs)/Dashboard.gif" alt="Dashboard" width="400" style="margin-right: 20px;">
 </div>
 
 ---

@@ -1,0 +1,107 @@
+Project Presentation: Dashboard Analysis and Recommendations
+
+Introduction
+Good morning/afternoon, and thank you for the opportunity to present this dashboard and the process behind its creation. Today, I will:
+1. Walk you through the dashboard and the reasoning behind the visualizations and layout.
+2. Explain the method used to transform raw data into an actionable report.
+3. Suggest ways to automate and improve this reporting process.
+4. Highlight some follow-up questions for better understanding and optimization.
+
+---
+
+Dashboard Overview
+
+Key Metrics and Visualizations
+Performance Metrics (Top Row Cards):  
+  These cards highlight the most critical business metrics: Total Net Sales (₦551.68M), Total Customers (612), and Total 9ltr Volume (134.97K). These give stakeholders an instant summary of overall performance.
+
+- Top 5 Customer Accounts:  
+  A table displaying the top-performing customer accounts by sales, along with their average costs and total net sales. This helps prioritize key accounts.
+
+- Net Sales by Customer Account:  
+  A bar chart that breaks down sales distribution by customer. This identifies which accounts contribute the most to revenue.
+
+- Customer Variance and Lost/Gained Accounts by Month:  
+  The line and bar charts visually track customer growth trends and retention rates. The lost and gained accounts analysis helps identify churn and new customer acquisition trends.
+
+- Sales Variance by Month:  
+  A column chart showing sales fluctuations over time, offering insights into seasonal trends.
+
+---
+
+Data Preparation: From Raw to Report
+
+To transform the raw dataset into this dashboard, the following steps were carried out using Power Query:
+
+1. Data Ingestion
+   - Source Data: Monthly sales data was imported from the ERP system, spanning March 2020 to February 2021.
+   - Challenges: Inconsistent formats and missing values.
+
+2. Data Cleaning and Transformation
+   Using Power Query, the following steps were performed:
+   - Removed Errors: Rows with missing or invalid data were filtered out.
+   - Split Columns: Columns with combined data types (e.g., dates and text) were separated for clarity.
+   - Renamed Columns: To ensure consistent and meaningful naming conventions.
+   - Created Relationships: Mapped customer accounts to a calendar table for time-based calculations.
+   - Generated Calculated Columns:
+     - Monthly Totals: Aggregated key metrics like sales and customer counts.
+     - Lost/Gained Customers: Derived by comparing customer lists year-over-year using measures.
+
+3. Data Modeling
+   - Created a Star Schema to optimize performance, separating   Fact Tables   (e.g., sales data) and   Dimension Tables   (e.g., calendar, customers).
+   - Defined relationships between tables to enable complex measures and slicer functionality.
+
+---
+
+      Automation and Scalability  
+
+To ensure the dashboard can handle   new monthly data   and larger datasets seamlessly, the following automation methods are suggested:
+
+     1.   Power Query Automation with M Code  
+   - Use   dynamic parameters   in M Code to update queries automatically when new data is added to the ERP system.
+   - Example: A query that dynamically loads all files from a folder (e.g., monthly CSV exports) without needing manual intervention.
+
+     2.   ERP System Integration  
+   - Directly connect Power BI to the ERP database using:
+     -   APIs  : Allowing real-time data fetches.
+     -   Connection Strings  : For direct access to the database, eliminating the need to manually import data files.
+
+   - Benefits:
+     -   Reduced Manual Work  : Eliminates the need to download, clean, and load data.
+     -   Real-Time Insights  : Ensures the dashboard reflects the latest performance metrics.
+
+     3.   Automated Refresh  
+   - Enable scheduled refresh in Power BI to ensure data is updated regularly (e.g., daily or weekly).
+   - Use Power BI   Gateway   for seamless connectivity with on-premise or cloud-hosted ERP systems.
+
+---
+
+      Follow-Up Questions for the Client  
+
+To further improve this reporting process, I would recommend asking the following questions:
+
+1.   ERP Data Details  :
+   - What database does the ERP system use? (e.g., SQL Server, Oracle, etc.)
+   - Does the system support APIs or direct database connections for data extraction?
+
+2.   Reporting Frequency  :
+   - How often do you need this dashboard updated? (e.g., daily, weekly, or monthly)
+
+3.   Additional Data Needs  :
+   - Are there any other datasets (e.g., inventory, marketing, or financial data) you'd like to integrate for a more comprehensive analysis?
+
+4.   User Roles  :
+   - Who will use this dashboard? Should we add user-specific views or permissions?
+
+5.   KPI Alignment  :
+   - Are there additional KPIs or metrics you'd like to track (e.g., customer retention rate, profitability per customer)?
+
+6.   Scalability  :
+   - Are there plans to expand the dataset? If so, should we account for future data sources now?
+
+---
+
+      Conclusion  
+This project demonstrates how i transformed the raw data into actionable insights while ensuring scalability and automation. By implementing the suggested improvements, we can provide a more dynamic and efficient reporting experience. Additionally, with answers to the proposed questions, we can refine the process to align better with the organization’s needs.
+
+Thank you! I’m happy to take any questions or discuss next steps.

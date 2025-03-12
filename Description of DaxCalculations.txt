@@ -1,0 +1,189 @@
+### **Structural Description and Explanation of DAX Measures**
+
+Below is an explanation of each DAX measure created for the task, its purpose, and how it was implemented in simple, easy-to-understand terms.
+
+---
+
+#### **1. Total Net Sales**
+**Measure:**
+```DAX
+Total Net Sales = SUM('Dataset'[Sales])
+```
+
+**Purpose:**
+This measure calculates the total sales revenue by summing up all the values in the **Sales** column of the dataset.
+
+**Implementation:**
+- The `SUM` function adds up all sales values in the dataset.
+- This measure provides a single number that represents the overall revenue.
+
+---
+
+#### **2. Total 9ltr Volume**
+**Measure:**
+```DAX
+Total 9ltr Volume = SUM('Dataset'[Volume 9ltr]) / 12
+```
+
+**Purpose:**
+This measure calculates the total **9-liter equivalent** volume sold. The division by 12 converts the original units (possibly smaller volumes) into standardized 9-liter units.
+
+**Implementation:**
+- `SUM` is used to aggregate all values in the **Volume 9ltr** column.
+- Dividing by 12 standardizes the values to reflect cases of 9 liters.
+
+**Why Divide by 12?**
+The original data might be in smaller units or bottles, and dividing by 12 ensures consistency in reporting by converting to standard cases.
+
+---
+
+#### **3. Total Customer**
+**Measure:**
+```DAX
+Total Customer = DISTINCTCOUNT('Dataset'[Customer Account])
+```
+
+**Purpose:**
+This measure counts the unique number of customers.
+
+**Implementation:**
+- `DISTINCTCOUNT` ensures only unique customer accounts are counted, avoiding duplicates.
+- This measure highlights the total customer base over the selected period.
+
+---
+
+#### **4. Gained Accounts**
+**Measure:**
+```DAX
+Gained Accounts = 
+COUNTROWS(
+    EXCEPT(
+        VALUES('Dataset'[Customer Account]),
+        CALCULATETABLE(
+            VALUES('Dataset'[Customer Account]),
+            DATEADD('Calendar'[Date], -1, YEAR)
+        )
+    )
+)
+```
+
+**Purpose:**
+This measure calculates the number of **new customers (gained accounts)** by comparing customers in the current year with those from the previous year.
+
+**Implementation:**
+1. `VALUES`: Extracts the unique customer accounts for the current year.
+2. `CALCULATETABLE` and `DATEADD`: Extract the unique customer accounts from the previous year by shifting the date back by 1 year.
+3. `EXCEPT`: Compares the two lists and returns customers that are in the current year but **not** in the previous year.
+4. `COUNTROWS`: Counts the number of rows (gained customers) from the comparison.
+
+---
+
+#### **5. Lost Accounts**
+**Measure:**
+```DAX
+Lost Accounts = 
+COUNTROWS(
+    EXCEPT(
+        CALCULATETABLE(
+            VALUES('Dataset'[Customer Account]),
+            DATEADD('Calendar'[Date], -1, YEAR)
+        ),
+        VALUES('Dataset'[Customer Account])
+    )
+)
+```
+
+**Purpose:**
+This measure calculates the number of **lost customers** by identifying those who were present in the previous year but are not in the current year.
+
+**Implementation:**
+1. `CALCULATETABLE` and `DATEADD`: Extract the unique customer accounts from the previous year.
+2. `VALUES`: Extracts the unique customer accounts for the current year.
+3. `EXCEPT`: Compares the two lists and returns customers that are in the previous year but **not** in the current year.
+4. `COUNTROWS`: Counts the number of rows (lost customers) from the comparison.
+
+---
+
+#### **6. Customer Variance by Month**
+**Measure:**
+```DAX
+Customer Variance by Month = DISTINCTCOUNT('Dataset'[Customer Account]) - 
+CALCULATE(
+    DISTINCTCOUNT('Dataset'[Customer Account]),
+    DATEADD('Calendar'[Date], -1, YEAR)
+)
+```
+
+**Purpose:**
+This measure calculates the **change in customer count** (net variance) for the current month compared to the same month in the previous year.
+
+**Implementation:**
+1. `DISTINCTCOUNT`: Counts the number of unique customers in the current month.
+2. `CALCULATE` and `DATEADD`: Counts the number of unique customers in the same month of the previous year by shifting the date back by 1 year.
+3. Subtraction: The difference between the current year’s and last year’s customer counts gives the **net variance**.
+
+---
+
+#### **7. Cumulative Net Sales**
+**Measure:**
+```DAX
+Cumulative Net Sales = 
+CALCULATE(
+    SUM('Dataset'[Sales]),
+    DATESYTD('Calendar'[Date])
+)
+```
+
+**Purpose:**
+This measure calculates the cumulative (year-to-date) total sales.
+
+**Implementation:**
+1. `SUM`: Aggregates the sales values.
+2. `DATESYTD`: Automatically sums up sales from the beginning of the year up to the selected date.
+3. `CALCULATE`: Adjusts the filter context to apply the year-to-date calculation.
+
+---
+
+#### **8. Sales Variance by Month**
+**Measure:**
+```DAX
+Sales Variance by Month = 
+SUM('Dataset'[Sales]) - 
+CALCULATE(
+    SUM('Dataset'[Sales]),
+    DATEADD('Calendar'[Date], -1, YEAR)
+)
+```
+
+**Purpose:**
+This measure calculates the difference in sales for the current month compared to the same month in the previous year.
+
+**Implementation:**
+1. `SUM`: Calculates the total sales for the current month.
+2. `CALCULATE` and `DATEADD`: Calculates the total sales for the same month in the previous year.
+3. Subtraction: The difference provides the sales variance.
+
+---
+
+### **Approach to Implementation**
+1. **Understanding Requirements:** The goal was to measure customer and sales performance metrics, like gained/lost accounts, total sales, and variances, over a defined time range.
+2. **Using Time Intelligence:** Leveraged functions like `DATEADD`, `DATESYTD`, and `CALCULATETABLE` to handle year-over-year and cumulative calculations efficiently.
+3. **Simplifying Data Analysis:**
+   - Used `VALUES` and `EXCEPT` to compare customer lists for gained and lost accounts.
+   - Aggregated metrics like sales and customer counts using simple functions (`SUM`, `DISTINCTCOUNT`) where possible.
+4. **Dynamic Context:** Applied `CALCULATE` to modify the default filter context, allowing comparisons and cumulative calculations.
+5. **Focus on Clarity:** Ensured each measure had a clear purpose and built on the data model with minimal complexity.
+
+---
+
+### **Potential Improvements for Future Use**
+1. **Automating Data Refresh:**
+   - Implementing Power Query with dynamic M code for automated data updates when new datasets are added.
+   - Directly integrating with the client’s ERP system via APIs or connection strings for real-time data updates.
+2. **Validating Results:** Setting up test cases or visuals to verify the accuracy of calculations as new data is introduced.
+3. **Questions for the Client:**
+   - How frequently is new data available (monthly, weekly)?
+   - Can we integrate directly with the ERP/database to streamline reporting?
+   - What additional metrics would be valuable for decision-making?
+
+This structured implementation ensures clarity, accuracy, and future scalability of the reports!
